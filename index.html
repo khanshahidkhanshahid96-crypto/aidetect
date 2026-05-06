@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JavaGoat — Setup Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow: #FACC15;
+    --yellow-dark: #CA9A00;
+    --black: #0a0a0a;
+    --surface: #141414;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #888;
+    --green: #22c55e;
+    --green-dim: #14532d;
+    --red: #ef4444;
+    --blue: #60a5fa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(250,204,21,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(250,204,21,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow blob */
+  body::after {
+    content: '';
+    position: fixed;
+    top: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(250,204,21,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    padding: 28px 0 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 64px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .nav-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .logo-box {
+    width: 36px;
+    height: 36px;
+    background: var(--yellow);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .logo-name {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--text);
+  }
+
+  .badge {
+    margin-left: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+  }
+
+  /* HERO */
+  .hero {
+    margin-bottom: 72px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--yellow-dark);
+    background: rgba(250,204,21,0.08);
+    border: 1px solid rgba(250,204,21,0.2);
+    padding: 5px 12px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .hero-tag::before { content: '◆'; font-size: 8px; }
+
+  h1 {
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  h1 span { color: var(--yellow); }
+
+  .hero-sub {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 400;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 16px; }
+
+  .step {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .step:nth-child(1) { animation-delay: 0.05s; }
+  .step:nth-child(2) { animation-delay: 0.10s; }
+  .step:nth-child(3) { animation-delay: 0.15s; }
+  .step:nth-child(4) { animation-delay: 0.20s; }
+  .step:nth-child(5) { animation-delay: 0.25s; }
+  .step:nth-child(6) { animation-delay: 0.30s; }
+  .step:nth-child(7) { animation-delay: 0.35s; }
+  .step:nth-child(8) { animation-delay: 0.40s; }
+
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .step-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(250,204,21,0.1);
+    border: 1px solid rgba(250,204,21,0.3);
+    color: var(--yellow);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .step-icon {
+    font-size: 18px;
+    opacity: 0.5;
+  }
+
+  .step-body { padding: 0; }
+
+  /* CMD BLOCK */
+  .cmd-block { border-bottom: 1px solid var(--border); }
+  .cmd-block:last-child { border-bottom: none; }
+
+  .cmd-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .cmd-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.03em;
+  }
+
+  .copy-btn:hover {
+    border-color: var(--yellow);
+    color: var(--yellow);
+    background: rgba(250,204,21,0.05);
+  }
+
+  .copy-btn.copied {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(34,197,94,0.07);
+  }
+
+  .copy-btn svg { width: 12px; height: 12px; flex-shrink: 0; }
+
+  pre.code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    padding: 16px 20px;
+    color: var(--text);
+    line-height: 1.8;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  pre.code .comment { color: #555; }
+  pre.code .tree-dir { color: var(--yellow); }
+  pre.code .tree-file { color: var(--blue); }
+
+  /* NOTE */
+  .note {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 20px;
+    font-size: 13px;
+    line-height: 1.6;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .note.info { color: #93c5fd; background: rgba(96,165,250,0.05); }
+  .note.success { color: #86efac; background: rgba(34,197,94,0.05); }
+  .note.warn { color: #fde68a; background: rgba(250,204,21,0.05); }
+
+  .note-icon { flex-shrink: 0; margin-top: 2px; font-size: 15px; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    background: rgba(255,255,255,0.07);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  /* TROUBLE */
+  .trouble-section {
+    margin-top: 48px;
+    margin-bottom: 64px;
+    animation: fadeUp 0.5s ease 0.5s both;
+  }
+
+  .section-heading {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .trouble-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .trouble-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  .trouble-prob {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #f87171;
+    margin-bottom: 8px;
+  }
+
+  .trouble-fix {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.55;
+    font-weight: 400;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-txt { font-size: 12px; color: #444; font-family: 'JetBrains Mono', monospace; }
+
+  /* ANIM */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo-box">🐐</div>
+    <span class="logo-name">JavaGoat</span>
+    <span class="badge">Neural Engine V4.2</span>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="hero">
+    <div class="hero-tag">Local Setup Guide</div>
+    <h1>Get it<br>running <span>locally.</span></h1>
+    <p class="hero-sub">Follow these 8 steps to set up the AI Image Forensics server on your Windows machine.</p>
+  </div>
+
+  <div class="steps">
+
+    <!-- Step 1 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">01</div>
+        <div class="step-title">Install Python 3.12</div>
+        <span class="step-icon">🐍</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">Windows — winget</span>
+            <button class="copy-btn" onclick="copy(this, 'winget install Python.Python.3.12')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">winget install Python.Python.3.12</pre>
+        </div>
+        <div class="note info">
+          <span class="note-icon">ℹ</span>
+          <span>After install, restart your terminal and verify with <code>python --version</code></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">02</div>
+        <div class="step-title">Install PyTorch</div>
+        <span class="step-icon">🔥</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">CPU only — safe default</span>
+            <button class="copy-btn" onclick="copy(this, 'pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu</pre>
+        </div>
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">NVIDIA GPU — CUDA 12.1</span>
+            <button class="copy-btn" onclick="copy(this, 'pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">03</div>
+        <div class="step-title">Install Python dependencies</div>
+        <span class="step-icon">📦</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">pip install</span>
+            <button class="copy-btn" onclick="copy(this, 'pip install fastapi uvicorn transformers pillow accelerate')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">pip install fastapi uvicorn transformers pillow accelerate</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">04</div>
+        <div class="step-title">Pre-download the AI model (~300 MB)</div>
+        <span class="step-icon">🧠</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">HuggingFace — umm-maybe/AI-image-detector</span>
+            <button class="copy-btn" onclick="copy(this, `python -c \"from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained('umm-maybe/AI-image-detector'); AutoModelForImageClassification.from_pretrained('umm-maybe/AI-image-detector'); print('Model ready!')\"`)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">python -c "from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained('umm-maybe/AI-image-detector'); AutoModelForImageClassification.from_pretrained('umm-maybe/AI-image-detector'); print('Model ready!')"</pre>
+        </div>
+        <div class="note info">
+          <span class="note-icon">ℹ</span>
+          <span>Cached to <code>C:\Users\YOU\.cache\huggingface\</code> — downloads once, reused forever.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">05</div>
+        <div class="step-title">Place your project files</div>
+        <span class="step-icon">📁</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">Folder structure</span>
+          </div>
+          <pre class="code"><span class="comment">your-project/</span>
+<span class="tree-dir">├──</span> <span class="tree-file">vision_server.py</span>
+<span class="tree-dir">└── www/</span>
+    <span class="tree-file">└── index.php</span></pre>
+        </div>
+        <div class="note warn">
+          <span class="note-icon">⚠</span>
+          <span>Place <code>index.php</code> inside Laragon's <code>www/</code> folder so the PHP server can serve it.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">06</div>
+        <div class="step-title">Install Laragon (PHP server)</div>
+        <span class="step-icon">🌐</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">Download URL</span>
+            <button class="copy-btn" onclick="copy(this, 'https://laragon.org/download/')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">https://laragon.org/download/</pre>
+        </div>
+        <div class="note info">
+          <span class="note-icon">ℹ</span>
+          <span>Download → Install → Start All → drop <code>index.php</code> into the <code>www/</code> folder.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">07</div>
+        <div class="step-title">Start the Python vision server</div>
+        <span class="step-icon">▶</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">Run in terminal — keep this window open</span>
+            <button class="copy-btn" onclick="copy(this, 'python vision_server.py')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">python vision_server.py</pre>
+        </div>
+        <div class="note success">
+          <span class="note-icon">✓</span>
+          <span>You should see: <code>Model Ready!</code> and <code>Service running at http://127.0.0.1:8000</code></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 8 -->
+    <div class="step">
+      <div class="step-head">
+        <div class="step-num">08</div>
+        <div class="step-title">Open the app in your browser</div>
+        <span class="step-icon">🚀</span>
+      </div>
+      <div class="step-body">
+        <div class="cmd-block">
+          <div class="cmd-meta">
+            <span class="cmd-label">Paste into browser address bar</span>
+            <button class="copy-btn" onclick="copy(this, 'http://localhost/index.php')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+              Copy
+            </button>
+          </div>
+          <pre class="code">http://localhost/index.php</pre>
+        </div>
+        <div class="note success">
+          <span class="note-icon">✓</span>
+          <span>Upload any image → click Analyze Asset → done! 🎉</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Troubleshooting -->
+  <div class="trouble-section">
+    <div class="section-heading">Quick Troubleshooting</div>
+    <div class="trouble-grid">
+      <div class="trouble-card">
+        <div class="trouble-prob">⚠ ModuleNotFoundError</div>
+        <div class="trouble-fix">Run <code>pip install &lt;module&gt;</code> for the missing package name shown in the error.</div>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-prob">⚠ Connection refused on scan</div>
+        <div class="trouble-fix">Python server isn't running. Go back to step 7 and start it.</div>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-prob">⚠ Slow first scan</div>
+        <div class="trouble-fix">Normal — the model warms up on first inference. Give it ~5 seconds.</div>
+      </div>
+      <div class="trouble-card">
+        <div class="trouble-prob">⚠ CUDA errors</div>
+        <div class="trouble-fix">Set <code>device = "cpu"</code> in <code>vision_server.py</code> and restart.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-txt">© 2025 JavaGoat Forensics</span>
+    <span class="footer-txt">Neural Engine V4.2</span>
+  </div>
+</footer>
+
+<script>
+function copy(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy`;
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
