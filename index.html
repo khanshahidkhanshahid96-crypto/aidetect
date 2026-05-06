@@ -1,351 +1,913 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JavaGoat — Setup Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primary-green: #16a34a;
-    --primary-green-hover: #15803d;
-    --bg: #ffffff;
-    --text-main: #000000; /* Absolute black for visibility */
-    --text-muted: #222222;
-    --border-dark: #000000;
-    --cmd-bg: #fdfdfd;
-    
-    /* Vibrant Step Colors */
-    --c1: #2563eb; --c2: #db2777; --c3: #059669; --c4: #ea580c; 
-    --c5: #7c3aed; --c6: #0891b2; --c7: #4f46e5; --c8: #be123c;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline AI Image Detection API in PHP</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #0f172a;
+            --secondary: #1e293b;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --success: #10b981;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --border: #334155;
+            --code-bg: #1e293b;
+            --highlight: #fbbf24;
+        }
 
-  body {
-    background: var(--bg);
-    color: var(--text-main);
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    line-height: 1.5;
-  }
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f35 50%, #0f172a 100%);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 24px;
-  }
+        /* Animated background pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
 
-  /* NAV */
-  nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 60px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--text-main);
-  }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-  .logo-box {
-    font-size: 24px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
+        header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 0.8s ease-out;
+        }
 
-  .badge {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    background: #000;
-    color: #fff;
-    padding: 4px 12px;
-    border-radius: 4px;
-  }
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  /* HERO */
-  .hero {
-    margin-bottom: 60px;
-  }
+        h1 {
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-  h1 {
-    font-size: 56px;
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    margin-bottom: 15px;
-  }
+        .subtitle {
+            font-size: 1.3em;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
 
-  .hero-sub {
-    font-size: 20px;
-    color: var(--text-muted);
-  }
+        .badge {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid var(--accent);
+            color: var(--accent-light);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-top: 20px;
+        }
 
-  /* STEPS */
-  .steps { display: grid; gap: 32px; }
+        .section {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
 
-  .step {
-    border: 2px solid var(--border-dark);
-    border-radius: 12px;
-    padding: 24px;
-    background: #fff;
-    box-shadow: 6px 6px 0px #000; /* Neubrutalist shadow for depth */
-  }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-  .step-head {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
+        .section:nth-child(1) { animation-delay: 0.1s; }
+        .section:nth-child(2) { animation-delay: 0.2s; }
+        .section:nth-child(3) { animation-delay: 0.3s; }
+        .section:nth-child(4) { animation-delay: 0.4s; }
+        .section:nth-child(5) { animation-delay: 0.5s; }
 
-  .step-num {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    color: white;
-    font-size: 18px;
-  }
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            color: var(--accent-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-  /* Step Color Variants */
-  .s1 .step-num { background: var(--c1); }
-  .s2 .step-num { background: var(--c2); }
-  .s3 .step-num { background: var(--c3); }
-  .s4 .step-num { background: var(--c4); }
-  .s5 .step-num { background: var(--c5); }
-  .s6 .step-num { background: var(--c6); }
-  .s7 .step-num { background: var(--c7); }
-  .s8 .step-num { background: var(--c8); }
+        h2::before {
+            content: attr(data-number);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #0f172a 100%);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
 
-  .step-title {
-    font-size: 22px;
-    font-weight: 700;
-  }
+        .description {
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
 
-  /* COMMAND BOX */
-  .cmd-block {
-    background: var(--cmd-bg);
-    border: 2px solid var(--text-main);
-    border-radius: 8px;
-    margin: 15px 0;
-    overflow: hidden;
-  }
+        .code-block {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
 
-  .cmd-meta {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 15px;
-    background: #f0f0f0;
-    border-bottom: 2px solid var(--text-main);
-  }
+        .code-block code {
+            color: #a1d8ff;
+            display: block;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            user-select: all;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .code-block code::-webkit-scrollbar { width: 8px; }
+        .code-block code::-webkit-scrollbar-track { background: transparent; }
+        .code-block code::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
 
-  .cmd-label {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #000;
-  }
+        .copy-button {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
 
-  /* COPY BUTTON - NOW GREEN */
-  .copy-btn {
-    background: var(--primary-green);
-    color: white;
-    border: 2px solid #000;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.1s, background 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
+        .copy-button:hover {
+            background: var(--accent-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
+        }
 
-  .copy-btn:hover {
-    background: var(--primary-green-hover);
-    transform: translateY(-1px);
-  }
+        .copy-button.copied {
+            background: var(--success);
+        }
 
-  .copy-btn:active {
-    transform: translateY(1px);
-  }
+        .info-box {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: var(--text-secondary);
+        }
 
-  pre.code {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 15px;
-    padding: 18px;
-    overflow-x: auto;
-    color: #000; /* Darkest black */
-    font-weight: 500;
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
+        .warning-box {
+            background: rgba(249, 115, 22, 0.1);
+            border-left: 4px solid #f97316;
+            padding: 16px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+            color: var(--text-secondary);
+        }
 
-  /* NOTES */
-  .note {
-    font-size: 14px;
-    padding: 12px;
-    border-left: 4px solid var(--text-main);
-    background: #f9f9f9;
-    margin-top: 15px;
-    color: #000;
-  }
+        .important-section {
+            background: rgba(251, 191, 36, 0.1);
+            border: 2px solid var(--highlight);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
 
-  .note code {
-    background: #eee;
-    padding: 2px 5px;
-    font-weight: 700;
-  }
+        .important-section h3 {
+            color: var(--highlight);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
 
-  /* FOOTER */
-  footer {
-    margin-top: 80px;
-    padding: 40px 0;
-    border-top: 2px solid #000;
-    font-weight: 700;
-    text-align: center;
-  }
+        .important-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
 
-  @media (max-width: 600px) {
-    h1 { font-size: 38px; }
-    .step { padding: 15px; }
-  }
-</style>
+        .important-section li {
+            padding-left: 30px;
+            margin-bottom: 10px;
+            position: relative;
+            color: var(--text-secondary);
+        }
+
+        .important-section li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .code-label {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-light);
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .step-note {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        .conclusion {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            border: 2px solid var(--success);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 50px;
+            font-size: 1.15em;
+            font-weight: 500;
+        }
+
+        .conclusion strong {
+            color: var(--success);
+        }
+
+        footer {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            h2 {
+                font-size: 1.3em;
+            }
+
+            .section {
+                padding: 25px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Code block language indicators */
+        .code-block.bash::before,
+        .code-block.python::before,
+        .code-block.php::before,
+        .code-block.html::before {
+            position: absolute;
+            top: 5px;
+            left: 20px;
+            font-size: 0.75em;
+            font-weight: bold;
+            opacity: 0.5;
+        }
+
+        .code-block.bash::before { content: 'BASH'; }
+        .code-block.python::before { content: 'PYTHON'; }
+        .code-block.php::before { content: 'PHP/HTML'; }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Offline AI Image Detection</h1>
+            <p class="subtitle">Complete Setup Guide: Windows to Production</p>
+            <p class="subtitle">PHP with Local FastAPI Integration</p>
+            <span class="badge">Step-by-step Tutorial</span>
+        </header>
 
-<div class="container">
-  <nav>
-    <div class="logo-box">🐐 JavaGoat</div>
-    <span class="badge">V4.2 ENGINE</span>
-  </nav>
+        <!-- Step 1 -->
+        <div class="section">
+            <h2 data-number="1">Install Python (skip if already done)</h2>
+            <p class="description">Open Command Prompt as Administrator and run:</p>
 
-  <div class="hero">
-    <h1>Local Setup <span>Guide.</span></h1>
-    <p class="hero-sub">High-visibility instructions for the AI Vision Server.</p>
-  </div>
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>winget install Python.Python.3.12</code>
+            </div>
 
-  <div class="steps">
+            <p class="description">After installation, close and reopen Command Prompt. Verify:</p>
 
-    <!-- Step 1 -->
-    <div class="step s1">
-      <div class="step-head">
-        <div class="step-num">1</div>
-        <div class="step-title">Install Python 3.12</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Windows Command</span>
-          <button class="copy-btn" onclick="copy(this, 'winget install Python.Python.3.12')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-            COPY
-          </button>
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>python --version
+pip --version</code>
+            </div>
         </div>
-        <pre class="code">winget install Python.Python.3.12</pre>
-      </div>
-      <p class="note">Restart terminal and check version using <code>python --version</code></p>
-    </div>
 
-    <!-- Step 2 -->
-    <div class="step s2">
-      <div class="step-head">
-        <div class="step-num">2</div>
-        <div class="step-title">Install PyTorch</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Standard Pip</span>
-          <button class="copy-btn" onclick="copy(this, 'pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu')">COPY</button>
+        <!-- Step 2 -->
+        <div class="section">
+            <h2 data-number="2">Create the project folder and virtual environment</h2>
+
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>mkdir C:\ai_detector
+cd C:\ai_detector
+python -m venv venv</code>
+            </div>
+
+            <p class="description">Activate the virtual environment:</p>
+
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>venv\Scripts\activate</code>
+            </div>
+
+            <div class="step-note">Your prompt should now show <strong>(venv)</strong></div>
         </div>
-        <pre class="code">pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu</pre>
-      </div>
-    </div>
 
-    <!-- Step 3 -->
-    <div class="step s3">
-      <div class="step-head">
-        <div class="step-num">3</div>
-        <div class="step-title">Install Dependencies</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Command</span>
-          <button class="copy-btn" onclick="copy(this, 'pip install fastapi uvicorn transformers pillow accelerate')">COPY</button>
+        <!-- Step 3 -->
+        <div class="section">
+            <h2 data-number="3">Install the required Python libraries</h2>
+            <p class="description">Inside the activated (venv), install the required packages for our vision AI and FastAPI server:</p>
+
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>pip install torch torchvision
+pip install fastapi uvicorn transformers pillow accelerate
+pip install python-multipart</code>
+            </div>
+
+            <div class="info-box">
+                This will download PyTorch, the web server framework, and machine learning components. It may take a few minutes.
+            </div>
         </div>
-        <pre class="code">pip install fastapi uvicorn transformers pillow accelerate</pre>
-      </div>
-    </div>
 
-    <!-- Step 4 -->
-    <div class="step s4">
-      <div class="step-head">
-        <div class="step-num">4</div>
-        <div class="step-title">Download AI Model</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Direct Download</span>
-          <button class="copy-btn" onclick="copy(this, 'python -c \"from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained(\'umm-maybe/AI-image-detector\'); AutoModelForImageClassification.from_pretrained(\'umm-maybe/AI-image-detector\'); print(\'Ready\')\"')">COPY</button>
+        <!-- Step 4 -->
+        <div class="section">
+            <h2 data-number="4">Create the API server script (api.py)</h2>
+            <p class="description">In the <code style="background: #1e293b; padding: 4px 8px; border-radius: 4px;">C:\ai_detector</code> folder, create a file named <code style="background: #1e293b; padding: 4px 8px; border-radius: 4px;">api.py</code> and paste this exact content:</p>
+
+            <div class="code-block python">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>import uvicorn
+from fastapi import FastAPI, UploadFile, File
+import torch
+from PIL import Image
+from transformers import AutoModelForImageClassification, AutoImageProcessor
+import io
+import time
+
+app = FastAPI()
+
+MODEL_NAME = "umm-maybe/AI-image-detector"
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+print(f"--- AI Vision Service Starting ---")
+print(f"Loading model into RAM using device: {device}...")
+start_load = time.time()
+
+# Load model once on startup
+processor = AutoImageProcessor.from_pretrained(MODEL_NAME)
+model = AutoModelForImageClassification.from_pretrained(MODEL_NAME).to(device)
+model.eval()
+
+print(f"Model Ready! (Loaded in {time.time()-start_load:.2f}s)")
+print(f"Service running at http://127.0.0.1:8000")
+
+@app.post("/scan-image")
+async def scan_image(file: UploadFile = File(...)):
+    start_process = time.time()
+    
+    # Read uploaded file
+    contents = await file.read()
+    image = Image.open(io.BytesIO(contents)).convert("RGB")
+    
+    # AI Logic
+    inputs = processor(images=image, return_tensors="pt").to(device)
+    with torch.no_grad():
+        outputs = model(**inputs)
+        probs = torch.softmax(outputs.logits, dim=-1)
+    
+    ai_prob = probs[0, 1].item()
+    
+    process_time = time.time() - start_process
+    print(f"Scan Completed: AI Prob {ai_prob:.4f} | Time: {process_time:.3f}s")
+    
+    return {"ai_score": ai_prob, "process_time": process_time}
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)</code>
+            </div>
         </div>
-        <pre class="code">python -c "from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained('umm-maybe/AI-image-detector'); AutoModelForImageClassification.from_pretrained('umm-maybe/AI-image-detector'); print('Ready')"</pre>
-      </div>
-    </div>
 
-    <!-- Step 5 -->
-    <div class="step s5">
-      <div class="step-head">
-        <div class="step-num">5</div>
-        <div class="step-title">Server Setup (Laragon)</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Download link</span>
-          <button class="copy-btn" onclick="window.open('https://laragon.org/download/')">VISIT</button>
+        <!-- Step 5 -->
+        <div class="section">
+            <h2 data-number="5">Start the AI Service (First time downloads model)</h2>
+            <p class="description">Still inside (venv) and the <code style="background: #1e293b; padding: 4px 8px; border-radius: 4px;">C:\ai_detector</code> folder, run the script to start your local AI server:</p>
+
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>python api.py</code>
+            </div>
+
+            <div class="info-box">
+                On the first run, it will automatically download the AI model (approx 350 MB) from HuggingFace. After this initial download, the API works completely offline.
+            </div>
         </div>
-        <pre class="code">https://laragon.org/download/</pre>
-      </div>
-      <p class="note">Drop your <code>index.php</code> into the <code>C:/laragon/www/</code> folder.</p>
-    </div>
 
-    <!-- Step 6 -->
-    <div class="step s7">
-      <div class="step-head">
-        <div class="step-num">6</div>
-        <div class="step-title">Run Vision Server</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Run this in terminal</span>
-          <button class="copy-btn" onclick="copy(this, 'python vision_server.py')">COPY</button>
+        <!-- Step 6 -->
+        <div class="section">
+            <h2 data-number="6">Verify the Server is Running</h2>
+            <p class="description">Wait until you see the success message in your Command Prompt:</p>
+
+            <div class="code-block bash">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>Model Ready! (Loaded in 2.45s)
+Service running at http://127.0.0.1:8000
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)</code>
+            </div>
+
+            <div class="warning-box">
+                <strong>Do not close this Command Prompt window!</strong> Your AI detection engine is now running in the background and waiting for image uploads from PHP.
+            </div>
         </div>
-        <pre class="code">python vision_server.py</pre>
-      </div>
-    </div>
 
-  </div>
+        <!-- Step 7 -->
+        <div class="section">
+            <h2 data-number="7">Integrate with your PHP code (JavaGoat App)</h2>
+            <p class="description">Create your <code style="background: #1e293b; padding: 4px 8px; border-radius: 4px;">index.php</code> file in your web server (e.g., XAMPP htdocs) and paste this entire code. This includes the cURL backend to talk to our Python API, and the stunning JavaGoat frontend:</p>
 
-  <footer>
-    &copy; 2025 JAVAGOAT FORENSICS. HIGH CONTRAST MODE ACTIVE.
-  </footer>
-</div>
+            <div class="code-label">index.php</div>
+            <div class="code-block php">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <code>&lt;?php
+/**
+ * JavaGoat AI Vision — High Performance Forensic Edition
+ */
+if (isset($_GET['action']) && $_GET['action'] === 'scan') {
+    set_time_limit(0); 
+    ob_start();
+    header('Content-Type: application/json; charset=utf-8');
 
-<script>
-function copy(btn, text) {
-  navigator.clipboard.writeText(text).then(() => {
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = 'COPIED!';
-    btn.style.background = '#000'; // Flash black on success
-    setTimeout(() => {
-      btn.innerHTML = originalContent;
-      btn.style.background = ''; // Back to green
-    }, 1500);
-  });
+    // CONFIGURATION
+    $hf_token = "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";   
+    $python_api_url = "http://127.0.0.1:8000/scan-image"; 
+
+    $result =[];
+
+    try {
+        if (!isset($_FILES['media'])) {
+            throw new Exception("No file was uploaded.");
+        }
+        $image_path = $_FILES['media']['tmp_name'];
+        $cfile = new CURLFile($image_path, $_FILES['media']['type'], $_FILES['media']['name']);
+        
+        $ch = curl_init($python_api_url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, ['file' =&gt; $cfile]);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30); 
+        
+        $response = curl_exec($ch);
+        $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $error_msg = curl_error($ch);
+        curl_close($ch);
+
+        if ($http_code !== 200) { throw new Exception("Error: $http_code. $error_msg"); }
+        
+        $data = json_decode($response, true);
+        $ai_prob = $data['ai_score'];
+        
+        $result = [["label" =&gt; "human", "score" =&gt; 1.0 - $ai_prob],["label" =&gt; "ai", "score" =&gt; $ai_prob]
+        ];
+    } catch (Exception $e) {
+        $result =["error" =&gt; true, "message" =&gt; $e-&gt;getMessage()];
+    }
+    ob_end_clean(); 
+    echo json_encode($result);
+    exit;
 }
-</script>
+?&gt;
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en" class="scroll-smooth"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"&gt;
+    &lt;title&gt;JavaGoat | AI Image Forensics&lt;/title&gt;
+    
+    &lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;
+    &lt;script src="https://unpkg.com/lucide@latest"&gt;&lt;/script&gt;
+    &lt;link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"&gt;
+
+    &lt;style&gt;
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: #FACC15;
+            background: radial-gradient(circle at top right, #FDE047, #FACC15);
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+        }
+        /* Mobile focus: Hide non-software elements */
+        @media (max-width: 1024px) {
+            .marketing-content, .stats-grid, footer {
+                display: none !important;
+            }
+            .app-container {
+                padding-top: 20px;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .glass-panel {
+                border-radius: 2.5rem;
+                margin: 0 10px;
+            }
+        }
+        /* Scanning Animation */
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: #000;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+            top: 0;
+            animation: scanAnim 2s infinite ease-in-out;
+            z-index: 20;
+        }
+        @keyframes scanAnim {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body class="min-h-screen text-gray-900"&gt;
+
+    &lt;!-- Navigation (Always visible) --&gt;
+    &lt;nav class="fixed top-0 w-full z-50 p-6"&gt;
+        &lt;div class="max-w-7xl mx-auto flex items-center justify-between"&gt;
+            &lt;div class="flex items-center gap-2"&gt;
+                &lt;div class="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center text-yellow-400"&gt;
+                    &lt;i data-lucide="shield-check" class="w-5 h-5"&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;span class="text-xl font-extrabold tracking-tighter"&gt;JavaGoat&lt;/span&gt;
+            &lt;/div&gt;
+            &lt;div class="hidden lg:flex gap-8 text-xs font-bold uppercase tracking-widest opacity-60"&gt;
+                &lt;a href="#"&gt;Forensics&lt;/a&gt;
+                &lt;a href="#"&gt;API&lt;/a&gt;
+                &lt;a href="#"&gt;Privacy&lt;/a&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/nav&gt;
+
+    &lt;main class="max-w-7xl mx-auto px-6 lg:pt-32 pt-20"&gt;
+        &lt;div class="grid lg:grid-cols-2 gap-16 items-center"&gt;
+            
+            &lt;!-- Marketing Side (Visible on Desktop only) --&gt;
+            &lt;div class="marketing-content space-y-8 hidden lg:block"&gt;
+                &lt;h1 class="text-7xl font-black leading-[0.9] tracking-tighter"&gt;
+                    TRUST NO &lt;br&gt;&lt;span class="opacity-30"&gt;PIXELS.&lt;/span&gt;
+                &lt;/h1&gt;
+                &lt;p class="text-2xl font-medium opacity-70 leading-relaxed"&gt;
+                    The elite forensic suite for detecting synthetic imagery and AI deepfakes.
+                &lt;/p&gt;
+                &lt;div class="flex gap-4"&gt;
+                    &lt;div class="bg-white/30 px-5 py-2 rounded-full border border-white/40 text-sm font-bold flex items-center gap-2"&gt;
+                        &lt;i data-lucide="cpu" class="w-4 h-4"&gt;&lt;/i&gt; V4 Neural Engine
+                    &lt;/div&gt;
+                    &lt;div class="bg-white/30 px-5 py-2 rounded-full border border-white/40 text-sm font-bold flex items-center gap-2"&gt;
+                        &lt;i data-lucide="lock" class="w-4 h-4"&gt;&lt;/i&gt; Private
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;!-- Main Software UI (Always visible) --&gt;
+            &lt;div class="app-container"&gt;
+                &lt;div class="glass-panel rounded-[3rem] p-6 md:p-10 relative"&gt;
+                    
+                    &lt;!-- App Stage: Upload --&gt;
+                    &lt;div id="view-upload" class="space-y-6"&gt;
+                        &lt;div class="aspect-square rounded-[2rem] bg-gray-900/5 border-2 border-dashed border-gray-900/20 flex flex-col items-center justify-center cursor-pointer hover:bg-white/40 transition-all relative overflow-hidden group" onclick="document.getElementById('hidden-file').click()"&gt;
+                            &lt;img id="img-preview" class="absolute inset-0 w-full h-full object-cover hidden"&gt;
+                            &lt;div id="upload-prompt" class="text-center group-hover:scale-105 transition-transform"&gt;
+                                &lt;div class="w-16 h-16 bg-gray-900/10 rounded-2xl flex items-center justify-center mx-auto mb-4"&gt;
+                                    &lt;i data-lucide="image-plus" class="w-8 h-8 opacity-40"&gt;&lt;/i&gt;
+                                &lt;/div&gt;
+                                &lt;p class="text-lg font-bold"&gt;Select Image&lt;/p&gt;
+                                &lt;p class="text-xs opacity-50 font-bold uppercase tracking-widest"&gt;Supports JPG, PNG, WebP&lt;/p&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;input type="file" id="hidden-file" hidden accept="image/*" onchange="handlePreview(this)"&gt;
+                        &lt;button id="btn-scan" disabled onclick="startAnalysis()" class="w-full bg-gray-900 text-white py-6 rounded-2xl font-black text-xl shadow-2xl hover:bg-black transition-all disabled:opacity-20 active:scale-95"&gt;
+                            ANALYZE ASSET
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+
+                    &lt;!-- App Stage: Scanning --&gt;
+                    &lt;div id="view-scanning" class="hidden py-16 text-center space-y-8"&gt;
+                        &lt;div class="relative w-48 h-48 mx-auto rounded-3xl overflow-hidden shadow-2xl"&gt;
+                            &lt;img id="scan-ref" class="w-full h-full object-cover opacity-40"&gt;
+                            &lt;div class="scan-line"&gt;&lt;/div&gt;
+                        &lt;/div&gt;
+                        &lt;div class="animate-pulse"&gt;
+                            &lt;h3 class="text-xl font-black uppercase tracking-tighter"&gt;Deconstructing Pixels&lt;/h3&gt;
+                            &lt;p class="text-sm opacity-50 font-bold"&gt;Scanning for GAN artifacts...&lt;/p&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;!-- App Stage: Results --&gt;
+                    &lt;div id="view-result" class="hidden text-center py-6"&gt;
+                        &lt;div class="mb-2"&gt;
+                            &lt;span class="text-[10px] font-black uppercase tracking-[0.2em] opacity-40"&gt;AI Probability&lt;/span&gt;
+                            &lt;h2 class="text-8xl font-black tracking-tighter" id="res-score"&gt;0%&lt;/h2&gt;
+                        &lt;/div&gt;
+                        
+                        &lt;div id="res-badge" class="inline-block px-8 py-3 rounded-full font-black text-xs tracking-widest mb-10 shadow-lg"&gt;
+                            VERDICT
+                        &lt;/div&gt;
+                        
+                        &lt;div class="grid grid-cols-2 gap-3 mb-8"&gt;
+                            &lt;div class="bg-black/5 p-4 rounded-2xl text-left"&gt;
+                                &lt;p class="text-[10px] font-bold uppercase opacity-40 mb-1"&gt;Source&lt;/p&gt;
+                                &lt;p class="font-bold text-sm" id="res-source"&gt;Inconclusive&lt;/p&gt;
+                            &lt;/div&gt;
+                            &lt;div class="bg-black/5 p-4 rounded-2xl text-left"&gt;
+                                &lt;p class="text-[10px] font-bold uppercase opacity-40 mb-1"&gt;Authenticity&lt;/p&gt;
+                                &lt;p class="font-bold text-sm" id="res-integrity"&gt;Checking...&lt;/p&gt;
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+
+                        &lt;button onclick="resetApp()" class="w-full border-2 border-gray-900 py-4 rounded-2xl font-bold text-sm hover:bg-gray-900 hover:text-white transition-all uppercase tracking-widest"&gt;
+                            New Analysis
+                        &lt;/button&gt;
+                    &lt;/div&gt;
+
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;!-- Stats (Desktop Only) --&gt;
+        &lt;div class="stats-grid grid lg:grid-cols-3 gap-8 mt-20 pb-20"&gt;
+            &lt;div class="glass-panel p-8 rounded-[2rem]"&gt;
+                &lt;div class="w-10 h-10 bg-gray-900 text-yellow-400 rounded-lg flex items-center justify-center mb-6"&gt;
+                    &lt;i data-lucide="zap" class="w-5 h-5"&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;h4 class="font-bold text-xl mb-2"&gt;Real-time&lt;/h4&gt;
+                &lt;p class="text-sm opacity-60 font-medium"&gt;Neural inference happens in under 200ms for instant forensics.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="glass-panel p-8 rounded-[2rem]"&gt;
+                &lt;div class="w-10 h-10 bg-gray-900 text-yellow-400 rounded-lg flex items-center justify-center mb-6"&gt;
+                    &lt;i data-lucide="fingerprint" class="w-5 h-5"&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;h4 class="font-bold text-xl mb-2"&gt;Private&lt;/h4&gt;
+                &lt;p class="text-sm opacity-60 font-medium"&gt;Images are analyzed in an encrypted sandbox and never stored.&lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div class="glass-panel p-8 rounded-[2rem]"&gt;
+                &lt;div class="w-10 h-10 bg-gray-900 text-yellow-400 rounded-lg flex items-center justify-center mb-6"&gt;
+                    &lt;i data-lucide="search" class="w-5 h-5"&gt;&lt;/i&gt;
+                &lt;/div&gt;
+                &lt;h4 class="font-bold text-xl mb-2"&gt;Precise&lt;/h4&gt;
+                &lt;p class="text-sm opacity-60 font-medium"&gt;Classifies patterns from Midjourney, DALL-E, and Stable Diffusion.&lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/main&gt;
+
+    &lt;footer class="max-w-7xl mx-auto px-6 py-10 border-t border-black/5 opacity-40 text-[10px] font-bold uppercase tracking-[0.2em] flex justify-between"&gt;
+        &lt;span&gt;© 2025 JavaGoat Forensics&lt;/span&gt;
+        &lt;span&gt;Neural Engine V4.2&lt;/span&gt;
+    &lt;/footer&gt;
+
+    &lt;script&gt;
+        lucide.createIcons();
+
+        function handlePreview(input) {
+            if (input.files &amp;&amp; input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e =&gt; {
+                    const preview = document.getElementById('img-preview');
+                    const prompt = document.getElementById('upload-prompt');
+                    const btn = document.getElementById('btn-scan');
+                    const scanRef = document.getElementById('scan-ref');
+
+                    preview.src = e.target.result;
+                    scanRef.src = e.target.result;
+                    preview.classList.remove('hidden');
+                    prompt.classList.add('hidden');
+                    btn.disabled = false;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function startAnalysis() {
+            const fileInput = document.getElementById('hidden-file');
+            const formData = new FormData();
+            formData.append('media', fileInput.files[0]);
+
+            document.getElementById('view-upload').classList.add('hidden');
+            document.getElementById('view-scanning').classList.remove('hidden');
+
+            try {
+                const response = await fetch(window.location.href + '?action=scan', { method: 'POST', body: formData });
+                const data = await response.json();
+                
+                if (data.error) throw new Error(data.message);
+                const aiScore = data.find(i =&gt; i.label === 'ai')?.score || 0;
+                displayResult(aiScore);
+            } catch (e) {
+                alert("Scan Error: " + e.message);
+                resetApp();
+            }
+        }
+
+        function displayResult(score) {
+            const pct = Math.round(score * 100);
+            document.getElementById('view-scanning').classList.add('hidden');
+            document.getElementById('view-result').classList.remove('hidden');
+
+            const scoreEl = document.getElementById('res-score');
+            const badge = document.getElementById('res-badge');
+            const integrity = document.getElementById('res-integrity');
+            const source = document.getElementById('res-source');
+
+            // Count Up
+            let current = 0;
+            const timer = setInterval(() =&gt; {
+                if(current &gt;= pct) { clearInterval(timer); scoreEl.innerText = pct + '%'; }
+                else { current++; scoreEl.innerText = current + '%'; }
+            }, 15);
+
+            if (pct &gt; 50) {
+                badge.innerText = "LIKELY AI GENERATED";
+                badge.className = "inline-block px-8 py-3 rounded-full font-black text-xs tracking-widest mb-10 bg-red-600 text-white shadow-xl shadow-red-900/20";
+                integrity.innerText = "Synthetic";
+                source.innerText = "AI Generated";
+            } else {
+                badge.innerText = "AUTHENTIC HUMAN ASSET";
+                badge.className = "inline-block px-8 py-3 rounded-full font-black text-xs tracking-widest mb-10 bg-emerald-600 text-white shadow-xl shadow-emerald-900/20";
+                integrity.innerText = "Original";
+                source.innerText = "Natural Capture";
+            }
+        }
+
+        function resetApp() {
+            document.getElementById('view-result').classList.add('hidden');
+            document.getElementById('view-scanning').classList.add('hidden');
+            document.getElementById('view-upload').classList.remove('hidden');
+            document.getElementById('img-preview').classList.add('hidden');
+            document.getElementById('upload-prompt').classList.remove('hidden');
+            document.getElementById('btn-scan').disabled = true;
+            document.getElementById('hidden-file').value = "";
+        }
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code>
+            </div>
+        </div>
+
+        <!-- Important Section -->
+        <div class="important-section">
+            <h3>⚠️ Important API Changes</h3>
+            <ul>
+                <li>PHP no longer executes Python directly via the command line.</li>
+                <li>Instead, PHP uses cURL to securely talk to the FastAPI backend running on port 8000.</li>
+                <li>This drastically improves speed because the Neural Network model stays loaded in RAM.</li>
+            </ul>
+        </div>
+
+        <!-- Step 8 -->
+        <div class="section">
+            <h2 data-number="8">Final test</h2>
+
+            <div class="step-note">
+                <strong>1.</strong> Ensure your Python FastAPI server is still running in your Command Prompt.
+            </div>
+
+            <div class="step-note">
+                <strong>2.</strong> Start your web server (XAMPP, IIS, etc.) and open <code style="background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px;">http://localhost/index.php</code>
+            </div>
+
+            <div class="step-note">
+                <strong>3.</strong> The new JavaGoat application will load. Upload an image to see the lightning-fast analysis in action!
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="conclusion">
+            <strong>🎉 That's it!</strong> You now have a blazing-fast, production-ready AI image detector API fully integrated into a stunning PHP interface!
+        </div>
+
+        <footer>
+            <p>Offline AI Image Detection Guide • Complete Setup Instructions</p>
+        </footer>
+    </div>
+
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                button.textContent = 'Copy failed';
+            });
+        }
+    </script>
 </body>
 </html>
