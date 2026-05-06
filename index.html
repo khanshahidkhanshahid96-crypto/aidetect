@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JavaGoat — Setup Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary: #6366f1;
-    --bg: #fdfdfd;
-    --card-bg: #ffffff;
-    --text-main: #2d3436;
-    --text-muted: #636e72;
-    --border: #edf2f7;
-    --code-bg: #f8f9fa;
+    --primary-green: #16a34a;
+    --primary-green-hover: #15803d;
+    --bg: #ffffff;
+    --text-main: #000000; /* Absolute black for visibility */
+    --text-muted: #222222;
+    --border-dark: #000000;
+    --cmd-bg: #fdfdfd;
     
-    /* Step Colors */
-    --c1: #4facfe; --c2: #f093fb; --c3: #43e97b; --c4: #fa709a; 
-    --c5: #f6d365; --c6: #38f9d7; --c7: #a18cd1; --c8: #ff9a9e;
+    /* Vibrant Step Colors */
+    --c1: #2563eb; --c2: #db2777; --c3: #059669; --c4: #ea580c; 
+    --c5: #7c3aed; --c6: #0891b2; --c7: #4f46e5; --c8: #be123c;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,136 +26,88 @@
     background: var(--bg);
     color: var(--text-main);
     font-family: 'Plus Jakarta Sans', sans-serif;
-    line-height: 1.6;
-  }
-
-  /* Decorative Background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: 
-      radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.03) 0%, transparent 20%),
-      radial-gradient(circle at 90% 80%, rgba(250, 112, 154, 0.03) 0%, transparent 20%);
-    z-index: -1;
+    line-height: 1.5;
   }
 
   .container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 40px 24px;
   }
 
   /* NAV */
   nav {
-    padding: 30px 0;
-    margin-bottom: 40px;
-  }
-
-  .nav-inner {
     display: flex;
     align-items: center;
-    gap: 12px;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--text-main);
   }
 
   .logo-box {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #6366f1, #a855f7);
-    border-radius: 12px;
+    font-size: 24px;
+    font-weight: 800;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
-  }
-
-  .logo-name {
-    font-size: 20px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
+    gap: 10px;
   }
 
   .badge {
-    margin-left: auto;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    color: var(--text-muted);
-    background: #f1f5f9;
+    font-size: 13px;
+    background: #000;
+    color: #fff;
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
   }
 
   /* HERO */
   .hero {
-    text-align: center;
     margin-bottom: 60px;
   }
 
-  .hero-tag {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 12px;
-  }
-
   h1 {
-    font-size: 48px;
-    font-weight: 700;
-    letter-spacing: -1.5px;
-    margin-bottom: 16px;
-    color: #1a1a1a;
-  }
-
-  h1 span {
-    background: linear-gradient(to right, #6366f1, #ec4899);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-size: 56px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 15px;
   }
 
   .hero-sub {
-    font-size: 18px;
+    font-size: 20px;
     color: var(--text-muted);
-    font-weight: 400;
   }
 
   /* STEPS */
-  .steps { display: grid; gap: 24px; }
+  .steps { display: grid; gap: 32px; }
 
   .step {
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 30px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
-  }
-
-  .step:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.08);
+    border: 2px solid var(--border-dark);
+    border-radius: 12px;
+    padding: 24px;
+    background: #fff;
+    box-shadow: 6px 6px 0px #000; /* Neubrutalist shadow for depth */
   }
 
   .step-head {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 15px;
     margin-bottom: 20px;
   }
 
   .step-num {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
-    font-size: 14px;
+    font-weight: 800;
     color: white;
+    font-size: 18px;
   }
 
   /* Step Color Variants */
@@ -169,145 +121,113 @@
   .s8 .step-num { background: var(--c8); }
 
   .step-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2d3436;
+    font-size: 22px;
+    font-weight: 700;
   }
 
-  /* CMD BLOCK */
+  /* COMMAND BOX */
   .cmd-block {
-    background: var(--code-bg);
-    border-radius: 12px;
-    margin: 12px 0;
-    border: 1px solid #f1f5f9;
+    background: var(--cmd-bg);
+    border: 2px solid var(--text-main);
+    border-radius: 8px;
+    margin: 15px 0;
+    overflow: hidden;
   }
 
   .cmd-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 16px;
-    border-bottom: 1px solid #eee;
+    padding: 10px 15px;
+    background: #f0f0f0;
+    border-bottom: 2px solid var(--text-main);
   }
 
   .cmd-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: #94a3b8;
+    font-size: 12px;
+    font-weight: 700;
     text-transform: uppercase;
+    color: #000;
   }
 
+  /* COPY BUTTON - NOW GREEN */
   .copy-btn {
-    border: none;
-    background: white;
-    padding: 4px 10px;
+    background: var(--primary-green);
+    color: white;
+    border: 2px solid #000;
+    padding: 6px 14px;
     border-radius: 6px;
-    font-size: 11px;
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
-    color: var(--text-muted);
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s;
+    transition: transform 0.1s, background 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
 
   .copy-btn:hover {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
+    background: var(--primary-green-hover);
+    transform: translateY(-1px);
+  }
+
+  .copy-btn:active {
+    transform: translateY(1px);
   }
 
   pre.code {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    padding: 16px;
+    font-size: 15px;
+    padding: 18px;
     overflow-x: auto;
-    color: #475569;
+    color: #000; /* Darkest black */
+    font-weight: 500;
+    white-space: pre-wrap;
+    word-break: break-all;
   }
 
   /* NOTES */
   .note {
-    font-size: 13px;
-    padding: 12px 16px;
-    border-radius: 12px;
-    margin-top: 12px;
-    display: flex;
-    gap: 10px;
-    background: #f8fafc;
-    color: #64748b;
+    font-size: 14px;
+    padding: 12px;
+    border-left: 4px solid var(--text-main);
+    background: #f9f9f9;
+    margin-top: 15px;
+    color: #000;
   }
 
   .note code {
-    background: rgba(0,0,0,0.05);
-    padding: 2px 4px;
-    border-radius: 4px;
+    background: #eee;
+    padding: 2px 5px;
+    font-weight: 700;
   }
 
-  /* TROUBLESHOOTING */
-  .trouble-section {
-    margin: 80px 0;
-  }
-
-  .section-title {
-    font-size: 24px;
+  /* FOOTER */
+  footer {
+    margin-top: 80px;
+    padding: 40px 0;
+    border-top: 2px solid #000;
     font-weight: 700;
     text-align: center;
-    margin-bottom: 32px;
   }
 
-  .trouble-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-
-  .trouble-card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 16px;
-    border: 1px solid var(--border);
-  }
-
-  .trouble-prob {
-    color: #e11d48;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-
-  .trouble-fix {
-    font-size: 14px;
-    color: var(--text-muted);
-  }
-
-  footer {
-    padding: 40px 0;
-    text-align: center;
-    border-top: 1px solid var(--border);
-    font-size: 13px;
-    color: #94a3b8;
-  }
-
-  @media (max-width: 640px) {
-    .trouble-grid { grid-template-columns: 1fr; }
-    h1 { font-size: 32px; }
+  @media (max-width: 600px) {
+    h1 { font-size: 38px; }
+    .step { padding: 15px; }
   }
 </style>
 </head>
 <body>
 
-<nav class="container">
-  <div class="nav-inner">
-    <div class="logo-box">🐐</div>
-    <span class="logo-name">JavaGoat</span>
-    <span class="badge">Version 4.2</span>
-  </div>
-</nav>
-
 <div class="container">
+  <nav>
+    <div class="logo-box">🐐 JavaGoat</div>
+    <span class="badge">V4.2 ENGINE</span>
+  </nav>
 
   <div class="hero">
-    <div class="hero-tag">Installation Guide</div>
-    <h1>Setup <span>JavaGoat</span></h1>
-    <p class="hero-sub">Get the AI forensics engine running on your local machine.</p>
+    <h1>Local Setup <span>Guide.</span></h1>
+    <p class="hero-sub">High-visibility instructions for the AI Vision Server.</p>
   </div>
 
   <div class="steps">
@@ -316,18 +236,19 @@
     <div class="step s1">
       <div class="step-head">
         <div class="step-num">1</div>
-        <div class="step-title">Install Python</div>
+        <div class="step-title">Install Python 3.12</div>
       </div>
       <div class="cmd-block">
         <div class="cmd-meta">
-          <span class="cmd-label">Terminal command</span>
-          <button class="copy-btn" onclick="copy(this, 'winget install Python.Python.3.12')">Copy</button>
+          <span class="cmd-label">Windows Command</span>
+          <button class="copy-btn" onclick="copy(this, 'winget install Python.Python.3.12')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            COPY
+          </button>
         </div>
         <pre class="code">winget install Python.Python.3.12</pre>
       </div>
-      <div class="note">
-        <span>Restart your terminal after installation and verify with <code>python --version</code></span>
-      </div>
+      <p class="note">Restart terminal and check version using <code>python --version</code></p>
     </div>
 
     <!-- Step 2 -->
@@ -338,8 +259,8 @@
       </div>
       <div class="cmd-block">
         <div class="cmd-meta">
-          <span class="cmd-label">Standard Installation</span>
-          <button class="copy-btn" onclick="copy(this, 'pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu')">Copy</button>
+          <span class="cmd-label">Standard Pip</span>
+          <button class="copy-btn" onclick="copy(this, 'pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu')">COPY</button>
         </div>
         <pre class="code">pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu</pre>
       </div>
@@ -349,12 +270,12 @@
     <div class="step s3">
       <div class="step-head">
         <div class="step-num">3</div>
-        <div class="step-title">Install dependencies</div>
+        <div class="step-title">Install Dependencies</div>
       </div>
       <div class="cmd-block">
         <div class="cmd-meta">
-          <span class="cmd-label">Python Packages</span>
-          <button class="copy-btn" onclick="copy(this, 'pip install fastapi uvicorn transformers pillow accelerate')">Copy</button>
+          <span class="cmd-label">Command</span>
+          <button class="copy-btn" onclick="copy(this, 'pip install fastapi uvicorn transformers pillow accelerate')">COPY</button>
         </div>
         <pre class="code">pip install fastapi uvicorn transformers pillow accelerate</pre>
       </div>
@@ -368,10 +289,10 @@
       </div>
       <div class="cmd-block">
         <div class="cmd-meta">
-          <span class="cmd-label">HuggingFace CLI</span>
-          <button class="copy-btn" onclick="copy(this, 'python -c \"from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained(\'umm-maybe/AI-image-detector\'); AutoModelForImageClassification.from_pretrained(\'umm-maybe/AI-image-detector\'); print(\'Ready\')\"')">Copy</button>
+          <span class="cmd-label">Direct Download</span>
+          <button class="copy-btn" onclick="copy(this, 'python -c \"from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained(\'umm-maybe/AI-image-detector\'); AutoModelForImageClassification.from_pretrained(\'umm-maybe/AI-image-detector\'); print(\'Ready\')\"')">COPY</button>
         </div>
-        <pre class="code">python -c "from transformers import AutoModelForImageClassification..."</pre>
+        <pre class="code">python -c "from transformers import AutoModelForImageClassification, AutoImageProcessor; AutoImageProcessor.from_pretrained('umm-maybe/AI-image-detector'); AutoModelForImageClassification.from_pretrained('umm-maybe/AI-image-detector'); print('Ready')"</pre>
       </div>
     </div>
 
@@ -379,102 +300,50 @@
     <div class="step s5">
       <div class="step-head">
         <div class="step-num">5</div>
-        <div class="step-title">Project Structure</div>
-      </div>
-      <pre class="code" style="background:#fcfcfc; border-radius:12px; border:1px dashed #ddd;">
-your-project/
-├── vision_server.py
-└── www/
-    └── index.php</pre>
-      <div class="note">
-        <span>Ensure <code>index.php</code> is inside your Laragon <code>www</code> folder.</span>
-      </div>
-    </div>
-
-    <!-- Step 6 -->
-    <div class="step s6">
-      <div class="step-head">
-        <div class="step-num">6</div>
-        <div class="step-title">Setup PHP Server</div>
+        <div class="step-title">Server Setup (Laragon)</div>
       </div>
       <div class="cmd-block">
         <div class="cmd-meta">
-          <span class="cmd-label">Laragon Download</span>
-          <button class="copy-btn" onclick="window.open('https://laragon.org/download/')">Visit Website</button>
+          <span class="cmd-label">Download link</span>
+          <button class="copy-btn" onclick="window.open('https://laragon.org/download/')">VISIT</button>
         </div>
         <pre class="code">https://laragon.org/download/</pre>
       </div>
+      <p class="note">Drop your <code>index.php</code> into the <code>C:/laragon/www/</code> folder.</p>
     </div>
 
-    <!-- Step 7 -->
+    <!-- Step 6 -->
     <div class="step s7">
       <div class="step-head">
-        <div class="step-num">7</div>
-        <div class="step-title">Start Vision Server</div>
+        <div class="step-num">6</div>
+        <div class="step-title">Run Vision Server</div>
       </div>
       <div class="cmd-block">
         <div class="cmd-meta">
-          <span class="cmd-label">Run Command</span>
-          <button class="copy-btn" onclick="copy(this, 'python vision_server.py')">Copy</button>
+          <span class="cmd-label">Run this in terminal</span>
+          <button class="copy-btn" onclick="copy(this, 'python vision_server.py')">COPY</button>
         </div>
         <pre class="code">python vision_server.py</pre>
       </div>
-      <div class="note">
-        <span>Keep this window open while using the application.</span>
-      </div>
-    </div>
-
-    <!-- Step 8 -->
-    <div class="step s8">
-      <div class="step-head">
-        <div class="step-num">8</div>
-        <div class="step-title">Launch Application</div>
-      </div>
-      <div class="cmd-block">
-        <div class="cmd-meta">
-          <span class="cmd-label">Local URL</span>
-          <button class="copy-btn" onclick="copy(this, 'http://localhost/index.php')">Copy</button>
-        </div>
-        <pre class="code">http://localhost/index.php</pre>
-      </div>
     </div>
 
   </div>
 
-  <div class="trouble-section">
-    <h2 class="section-title">Help & Troubleshooting</h2>
-    <div class="trouble-grid">
-      <div class="trouble-card">
-        <div class="trouble-prob">Module Not Found</div>
-        <div class="trouble-fix">Try running <code>pip install</code> followed by the name of the missing package.</div>
-      </div>
-      <div class="trouble-card">
-        <div class="trouble-prob">Connection Error</div>
-        <div class="trouble-fix">Ensure the Python server from Step 7 is still active and hasn't crashed.</div>
-      </div>
-    </div>
-  </div>
-
+  <footer>
+    &copy; 2025 JAVAGOAT FORENSICS. HIGH CONTRAST MODE ACTIVE.
+  </footer>
 </div>
-
-<footer>
-  <div class="container">
-    &copy; 2025 JavaGoat Forensics. Designed for clarity.
-  </div>
-</footer>
 
 <script>
 function copy(btn, text) {
   navigator.clipboard.writeText(text).then(() => {
-    const originalText = btn.innerText;
-    btn.innerText = 'Copied!';
-    btn.style.background = '#43e97b';
-    btn.style.color = 'white';
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = 'COPIED!';
+    btn.style.background = '#000'; // Flash black on success
     setTimeout(() => {
-      btn.innerText = originalText;
-      btn.style.background = 'white';
-      btn.style.color = '#636e72';
-    }, 2000);
+      btn.innerHTML = originalContent;
+      btn.style.background = ''; // Back to green
+    }, 1500);
   });
 }
 </script>
